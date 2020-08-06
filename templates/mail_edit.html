@@ -1,0 +1,52 @@
+<div class="modal-dialog modal-confirm">
+    <div class="modal-content">
+            <div class="modal-header">
+				<div class="icon-box">
+					<i class="material-icons">border_color</i>
+				</div>
+				<h4 class="modal-title">Edit User's mail</h4>
+			</div>
+            <form id="subscribe-email-form" method="post">{% csrf_token %}
+			<div class="modal-body">
+
+                    <div class="fieldset">
+                        {% for field in form %}
+                            <div class="group">
+                                <label class="label">{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="Save" style="margin-bottom: 5px;" />
+                </div>
+            </div>
+            </form>
+    </div>
+</div>
+
+
+<script>
+    $('#subscribe-email-form').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            data: $('#subscribe-email-form').serialize(),
+            url: {% url 'mail_edit' %},
+            type: 'POST',
+
+            success: function(data){
+                $.ajax({
+                    url: {% url 'account' %},
+                    type: 'GET',
+
+                    success: function(data){
+                        document.open(); document.write(data);
+                        document.close();
+                    }
+                })
+            }
+        });
+    });
+</script>
